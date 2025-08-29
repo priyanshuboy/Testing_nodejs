@@ -2,8 +2,7 @@ import { describe , it , expect , vi} from "vitest";
 import request from "supertest"; // ideal way to test express app
 import {app} from "./index"; // import the express app
 import { PrismaClient } from "./generated/prisma";
- const prisma = new PrismaClient();
- 
+
 vi.mock('./generated/prisma',  () => { // ignore the actual db calls
 
     const mPrismaClient = {

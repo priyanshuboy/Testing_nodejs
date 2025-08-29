@@ -1,8 +1,10 @@
 import z from 'zod';
+import { mockDeep } from 'vitest-mock-extended';
 import express from 'express';
-import { PrismaClient } from '../src/generated/prisma';
+import { Prisma, PrismaClient } from './generated/prisma';
 export const app = express();
 const prisma = new PrismaClient();
+export const prismaClient = mockDeep<PrismaClient>();
 app.use(express.json());
 
 const SumResponseSchema = z.object({
@@ -21,7 +23,7 @@ app.post('/sum', async (req, res) => {
     }
     const { a, b } = parseResult.success ? parseResult.data : { a: 0, b: 0 };
        
-    await prisma.user.create({
+    await prismaClient.user.create({
         data  :{ 
             a : a,
             b :b
