@@ -1,6 +1,19 @@
-import { describe , it , expect } from "vitest";
+import { describe , it , expect , vi} from "vitest";
 import request from "supertest"; // ideal way to test express app
 import {app} from "./index"; // import the express app
+import { PrismaClient } from "./generated/prisma";
+ const prisma = new PrismaClient();
+ 
+vi.mock('./generated/prisma',  () => { // ignore the actual db calls
+
+    const mPrismaClient = {
+        user : {
+            create : vi.fn()
+        }
+    }
+    return { PrismaClient : vi.fn(() => mPrismaClient)}
+})
+
 
 describe("POST /sum", () => {
     
@@ -10,9 +23,11 @@ describe("POST /sum", () => {
             a : 5 ,
             b : 10
         }).set('Accept', 'application/json');
-
+   
+  
         expect(response.status).toBe(201);
         expect(response.body.sum).toBe(15); 
+    
           
     })
 
